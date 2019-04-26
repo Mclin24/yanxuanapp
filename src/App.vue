@@ -1,29 +1,34 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+	<div id='app'>
+		<keep-alive>
+			<router-view></router-view>
+		</keep-alive>
+		<router-view name="detail"></router-view>
+		<navBar></navBar>
+		<!-- 登录界面 -->
+		<LoginPage v-if="showLogin" :successPath="loginSuccessPath"></LoginPage>
+   </div>
 </template>
-
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+<script>
+	import LoginPage from '@pages/common/login'
+	export default {
+		components:{
+			LoginPage
+		},
+		data() {
+			return {
+				showLogin: false,
+				loginSuccessPath : ''
+			}
+		},
+		created(){
+			this.$center.$on('toggle-login',(path)=>{
+				//关闭登录注册页面
+				this.showLogin = !this.showLogin;
+				this.loginSuccessPath = path;
+			})
+		}
+	};
+</script>
+<style>
 </style>
